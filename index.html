@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <form id="form_data">
+            <div>
+                <label for="fecha">Fecha</label>
+                <input type="date" name="fecha" id="fecha">
+            </div>
+
+            <div>
+                <label for="centroCostos">Centro de Costos</label>
+                <select name="centroCostos" id="centroCostos">
+                    <option value="0">Seleccione un centro de costos</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="usuario">Usuario</label>
+                <input type="text" name="usuario" id="usuario" onkeyup="validarUsuario(this.value)">
+                <div id="prueba"></div>
+            </div>
+        </form>
+        <div>
+            <button id="btn_add">Añadir</button>
+            <button id="btn_grabar">Grabar</button>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                    </tr>
+                    <tr>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                        <th>prueba</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="container-prod">
+
+            </div>
+            <!-- <table id="form_productos">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table> -->
+        </div>
+  
+    </div>
+</body>
+<script src="js/main.js"></script>
+</html>
+

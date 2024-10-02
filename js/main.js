@@ -1,0 +1,231 @@
+let productos;
+let centroCostos;
+let usuarios;
+
+const options = document.getElementById('centroCostos');
+const form_poductos = document.querySelector("#form_productos tbody");
+
+fetch("acciones.php?action=getProductos",{
+    method: 'GET'
+}).then(response => response.json())
+.then(data => {
+    productos = data;
+    console.log(data);
+    /* productos.forEach((p, index) => {
+        form_poductos.innerHTML += `
+            <tr>
+                <td>${p.ccodprod}</td>
+                <td>${p.cdesprod}</td>
+            </tr>`;
+    }) */
+    iniciarPaginador(productos);
+})
+
+fetch("acciones.php?action=getCentroCostos",{
+    method: 'GET'
+}).then(response => response.json())
+.then(data => {
+    centroCostos = data;
+    console.log(centroCostos);
+    centroCostos.forEach(p => {
+        options.innerHTML+=`<option value="${p.nidreg}">${p.ccodproy} - ${p.cdesproy}</option>`
+    });
+    
+    
+})
+
+fetch("acciones.php?action=getUsuarios",{
+    method: 'GET'
+}).then(response => response.json())
+.then(data => {
+    usuarios = data;
+    console.log(usuarios)
+    console.log("cargado")
+})
+
+function validarUsuario(user){
+    let found = false;
+    usuarios.forEach(u => {
+        if(user == u.cnameuser){
+            found = true
+        }
+    })
+    console.log(found)
+}
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("btn_add");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+function iniciarPaginador(data) {
+    const content = document.querySelector('.container-prod');
+    let itemsPerPage = 25; // Valor por defecto
+    let currentPage = 0;
+    const maxVisiblePages = 10; // Número máximo de botones visibles
+
+    // Convertir los datos a filas de tabla
+    const items = data.map(item => {
+        return `<tr>
+            <td>${item.ccodprod}</td> <!-- Cambia 'id' y 'name' según tu estructura de datos -->
+            <td>${item.cdesprod}</td>
+        </tr>`;
+    });
+
+    // Mostrar una página específica
+    function showPage(page) {
+        const startIndex = page * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const visibleItems = items.slice(startIndex, endIndex);
+        
+        // Mostrar los elementos en la tabla
+        content.innerHTML = `
+            <table class="table">
+                <thead>
+                    <tr><th>Código</th><th>Descripción</th></tr>
+                </thead>
+                <tbody>${visibleItems.join('')}</tbody>
+            </table>
+        `;
+
+        updateActiveButtonStates();
+        createPageButtons();
+    }
+
+    // Crear los botones de paginación y el selector de elementos por página
+    function createPageButtons() {
+        const totalPages = Math.ceil(items.length / itemsPerPage);
+        let paginationContainer = document.querySelector('.pagination');
+
+        // Si el contenedor de paginación no existe, crearlo
+        if (!paginationContainer) {
+            paginationContainer = document.createElement('div');
+            paginationContainer.classList.add('pagination');
+            content.appendChild(paginationContainer);
+        } else {
+            // Limpiar el contenedor existente
+            paginationContainer.innerHTML = '';
+        }
+
+        // Crear el selector para elementos por página
+        const itemsPerPageSelect = document.createElement('select');
+        const options = [5, 10, 15, 25, 50, 100];
+
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            if (option === itemsPerPage) opt.selected = true; // Establecer 5 como seleccionado por defecto
+            itemsPerPageSelect.appendChild(opt);
+        });
+
+        // Agregar evento al selector
+        itemsPerPageSelect.addEventListener("change", function() {
+            itemsPerPage = parseInt(this.value); // Actualizar el número de elementos por página
+            currentPage = 0; // Reiniciar a la primera página
+            createPageButtons();
+            showPage(currentPage);
+        });
+
+        paginationContainer.appendChild(itemsPerPageSelect); // Agregar el selector al contenedor de paginación
+
+        // Botón "Primera"
+        const firstButton = document.createElement('button');
+        firstButton.textContent = 'Primera';
+        firstButton.disabled = currentPage === 0;
+        firstButton.addEventListener('click', () => {
+            currentPage = 0;
+            showPage(currentPage);
+        });
+        paginationContainer.appendChild(firstButton);
+
+        // Botón "Anterior"
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Anterior';
+        prevButton.disabled = currentPage === 0;
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+        paginationContainer.appendChild(prevButton);
+
+        // Mostrar botones limitados
+        const startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
+        const endPage = Math.min(totalPages, startPage + maxVisiblePages);
+
+        for (let i = startPage; i < endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i + 1;
+            pageButton.disabled = i === currentPage; // Deshabilitar botón si es la página actual
+            pageButton.classList.toggle('active', i === currentPage); // Agregar la clase 'active' si es la página actual
+            pageButton.addEventListener('click', () => {
+                currentPage = i;
+                showPage(currentPage);
+            });
+
+            paginationContainer.appendChild(pageButton);
+        }
+
+        // Botón "Siguiente"
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Siguiente';
+        nextButton.disabled = currentPage === totalPages - 1;
+        nextButton.addEventListener('click', () => {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+        paginationContainer.appendChild(nextButton);
+
+        // Botón "Última"
+        const lastButton = document.createElement('button');
+        lastButton.textContent = 'Última';
+        lastButton.disabled = currentPage === totalPages - 1;
+        lastButton.addEventListener('click', () => {
+            currentPage = totalPages - 1;
+            showPage(currentPage);
+        });
+        paginationContainer.appendChild(lastButton);
+    }
+
+    // Actualizar los estados activos de los botones de paginación
+    function updateActiveButtonStates() {
+        const pageButtons = document.querySelectorAll('.pagination button');
+        pageButtons.forEach((button, index) => {
+            // Remover clase 'active' de todos los botones
+            button.classList.remove('active');
+            // Si el botón es el de la página actual, agregar la clase 'active'
+            if (parseInt(button.textContent) === currentPage + 1) {
+                button.classList.add('active');
+            }
+        });
+    }
+
+    // Inicializar la paginación
+    createPageButtons();
+    showPage(currentPage); // Mostrar la primera página
+}

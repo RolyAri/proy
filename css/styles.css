@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+:root {
+    /* Primary Colors */
+    --color-primary-main: #5A3FE1;
+    --color-primary-hover: #3314C7;
+    --color-primary-pressed: #200F70;
+    --color-primary-focus: #AC9FF0;
+    --color-primary-border: #C4BAF5;
+    --color-primary-secondary: #EFEDFA;
+  
+    /* Gray Colors */
+    --color-gray-100: #ECECEC;
+    --color-gray-200: #D8D8D8;
+    --color-gray-300: #C5C5C5;
+    --color-gray-400: #B1B1B1;
+    --color-gray-500: #9E9E9E;
+    --color-gray-600: #7E7E7E;
+    --color-gray-700: #5F5F5F;
+    --color-gray-800: #3F3F3F;
+    --color-gray-900: #202020;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1rem 1rem 1rem 2rem;
+    background: var(--color-primary-secondary);
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow-y: scroll;
+}
+
+/* Resultados */
+.container .table{
+    /* height: 85vh; */
+    border-radius: 25px;
+    margin: 0 auto;
+    filter: drop-shadow(0px 5px 12px rgba(0, 0, 0, 0.1));
+}
+
+.table {
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: collapse;
+    
+}
+
+.table thead{
+    background-color: var(--color-gray-200);
+    color: #000;
+}
+
+.table thead tr th{
+    padding: 10px;
+    text-align: left;
+}
+.table tbody{
+    background-color: var(--color-gray-100);
+}
+.table tbody tr:nth-child(2n){
+    background-color: var(--color-gray-200);
+}
+.table tbody tr:hover {
+    border-bottom: 1px var(--color-gray-700) solid;
+    border-top: 1px var(--color-gray-700) solid;
+}
+.table tbody tr td{
+    font-family: "Inter", sans-serif;
+    text-align: left;
+    padding: 10px;
+}
+
+.wrap::-webkit-scrollbar{
+    width: 8px;
+    background-color: var(--color-gray-300);
+    border-radius: 20px;
+    }
+   .wrap::-webkit-scrollbar:window-inactive {
+    display: none;
+    }
+   .wrap::-webkit-scrollbar-thumb  {
+    background-color: var(--color-gray-400);
+    border-radius: 6px;
+   
+    }
+
+.validar {
+    display: inline-flex;
+    background-color: var(--color-primary-main);
+    border: 3px var(--color-primary-focus) solid;
+    padding: 0.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--color-gray-100);
+    transition: 0.5s ease;
+}
+.validar:hover {
+    background-color: var(--color-primary-pressed);
+    transition: 0.5s ease;
+}
+
+
+  .pagination {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    outline: 1px solid var(--color-primary-main);
+    color: var(--color-primary-main);
+    border-radius: 4px;
+    border: none;
+    background-color: var(--color-primary-secondary);
+  }
+  
+  .hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+  
+  .pagination button.active {
+    background-color: var(--color-primary-main);
+    color: white;
+  }
+
+.oculto {
+    display: none;
+}
+
+.wrap-index {
+    width: 80%;
+    margin: 0 auto;
+    padding: 1rem 1rem 1rem 2rem;
+    background: var(--color-primary-secondary);
+    box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+}
+
+.wrap-index #registro_requerimiento .cabecera{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wrap-index #registro_requerimiento .cabecera .logo{
+    width: 10%;
+}
+
+.wrap-index #registro_requerimiento .cabecera .logo img {
+    width: 100%;
+}
+
+.select select{
+    appearance: none;
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-gray-400);
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 200px; /* Ajusta el ancho */
+    border-radius: 4px;
+    color: var(--color-gray-700);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.select select:focus {
+    outline: none;
+    border-color: #5A3FE1; /* Color de borde al hacer clic */
+  }
+  .select {
+    position: relative;
+    width: 200px;
+  }
+  .select i{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: var(--color-gray-700);
+  }
+
+  .select select::-webkit-scrollbar {
+    width: 8px; /* Ancho del scroll */
+}
+
+.select select::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Fondo del track del scroll */
+    border-radius: 10px;
+}
+
+.select select::-webkit-scrollbar-thumb {
+/*     background-color: #6a0dad; */
+    border-radius: 10px;
+    border: 2px solid #f0f0f0; 
+}
+
+.select select::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-gray-300); /* Color del pulgar al pasar el mouse */
+}
+.select select option:hover{
+    background-color: var(--color-primary-secondary);
+}
+.datos_solicitante, 
+.nomb_solicitante,
+.cont_solicitante,
+.areas_relacionadas {
+    display: flex;
+    justify-content: space-between;
+}
+.datos_solicitante div,
+.nomb_solicitante div,
+.cont_solicitante div,
+.areas_relacionadas div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center;
+}
+.datos_solicitante div .select{
+    height: 40px;
+}
+.mayusculas {
+    text-transform: uppercase;
+}
+.objetivos_requerimientos {
+    width: 100%;
+}
+.textarea {
+    width: 100%;
+}
+.procedimientos_formatos_relacionados {
+    width: 100%;
+}
+.titulocuerpo {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    background-color: var(--color-primary-main);
+    color: #FFFFFF;
+    justify-content: center;
+    align-items: center;
+}
