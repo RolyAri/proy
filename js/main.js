@@ -3,8 +3,35 @@ let centroCostos;
 let usuarios;
 let selectedRowsSet = new Set(); // Conjunto para almacenar las filas seleccionadas
 
+const userInput = document.getElementById("usuario");
+const inputFecha = document.getElementById("fecha");
+const ccInput = document.getElementById("centroCostos");
+
+const fecha = new Date();
+console.log(formatDate(fecha))
+
+inputFecha.value = formatDate(fecha);
+
+let fechaValue;
+let userValue;
+let ccValue;
+
 const options = document.getElementById('centroCostos');
 const form_poductos = document.querySelector("#form_productos tbody");
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 fetch("acciones.php?action=getProductos",{
     method: 'GET'
@@ -89,7 +116,7 @@ function iniciarPaginador(data) {
 
     // Convertir los datos a filas de tabla
     const items = data.map(item => {
-        return `<tr data-id="${item.ccodprod}">
+        return `<tr data-id="${item.id_cprod}">
             <td>${item.ccodprod}</td> <!-- Cambia 'id' y 'name' según tu estructura de datos -->
             <td>${item.cdesprod}</td>
         </tr>`;
@@ -261,14 +288,21 @@ function iniciarPaginador(data) {
 }
 
 function buscar(cadena){
-    let filteredItems = productos.filter(item => {
+    /* let filteredItems = productos.filter(item => {
         return Object.values(item).some(value => 
             value.toString().toLowerCase().includes(cadena)
         );
+    }); */
+    let filteredItems = productos.filter(item => {
+        return Object.values(item).some(value => 
+            value !== null && value !== undefined && value.toString().toLowerCase().includes(cadena.toLowerCase())
+        );
     });
-    currentPage = 0;
+    iniciarPaginador(filteredItems);
+    /* currentPage = 0;
     createPageButtons();
-    showPage(currentPage);
+    showPage(currentPage); */
+    /* iniciarPaginador(filteredItems); */
 }
 
 let cont = 0;
@@ -278,13 +312,13 @@ document.getElementById('add_data').addEventListener('click', function () {
     if (selectedRows.length > 0) {
         const indexTable = document.querySelector('#data_form tbody');
         selectedRows.forEach(id => {
-            const product = productos.find(p => p.ccodprod === id);
+            const product = productos.find(p => p.id_cprod === id);
             if (product) {
                 const newRow = indexTable.insertRow();
                 newRow.insertCell(0).textContent = ++cont;
                 newRow.insertCell(1).textContent = product.ccodprod;
                 newRow.insertCell(2).textContent = product.cdesprod;
-                newRow.insertCell(3).innerHTML = '<input type="text" class="cantidad" value="0">';
+                newRow.insertCell(3).innerHTML = `<input type="text" class="cantidad" value="0" id="${product.id_cprod}">`;
                 
                 // Añadir más celdas según sea necesario
             }
@@ -292,4 +326,59 @@ document.getElementById('add_data').addEventListener('click', function () {
     } else {
         alert('No hay filas seleccionadas');
     }
+    selectedRowsSet = new Set();
+    iniciarPaginador(productos)
+});
+
+let detalle = [];
+document.getElementById("btn_grabar").addEventListener('click', function() {
+    const content = document.querySelector('#data_form');
+    const items = Array.from(content.getElementsByTagName('tr')).slice(1);
+    const valueInputs = Array.from(content.querySelectorAll('tr .cantidad'));
+    fechaValue = inputFecha.value;
+    userValue = userInput.value;
+    ccValue = parseInt(ccInput.value);
+    items.forEach((i, index) => {
+        const valueFila = `${i.innerText}${valueInputs[index].value}\t${valueInputs[index].id}`
+        const partes = valueFila.split('\t');
+        console.log(valueFila)
+
+        const filaJson = {
+            codprod: partes[1],
+            idprod: partes[4],
+            desprod: partes[2],
+            cantprod: parseInt(partes[3]),
+            numdoc: userValue,
+            fecha: fechaValue,
+            centrocosto: ccValue
+        };
+        console.log(filaJson);
+        detalle.push(filaJson);
+    })
+    /* console.log(items) */
+    console.log(items.length);
+    console.log(detalle);
+    fetch("acciones.php?action=saveDetalle",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(detalle)
+    }).then(response => response.json())
+    .then(data => {
+        if(data.success){
+            Swal.fire({
+                icon: "success",
+                title: "Registro exitoso",
+                text: "Los registros se han guardado exitosamente"
+            });
+        }else {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Error al procesar los registros, intente nuevamente"
+            });
+        }
+    })
+    detalle = [];
 });

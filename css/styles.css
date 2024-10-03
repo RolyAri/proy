@@ -2,6 +2,9 @@
 
 *{
     box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+    padding: 0;
+    margin: 0;
 }
 
 :root {
@@ -325,4 +328,54 @@
 
 #data_form tbody tr td:nth-child(4){
     padding: 0;
+}
+
+.container-btns{
+    display: flex;
+    justify-content: end;
+    gap: 15px;
+    margin: 1rem 0;
+}
+
+.btn {
+    background-color: none;
+    border: 0;
+    cursor: pointer;
+    background-color: var(--color-primary-main);
+    border: 3px var(--color-primary-focus) solid;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--color-gray-100);
+    transition: 0.5s ease;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn svg {
+    width: 20px; /* Ajusta el ancho del SVG */
+    height: 20px; /* Ajusta la altura del SVG */
+    fill: var(--color-gray-100); /* Color del ícono, puede cambiarse según sea necesario */
+}
+
+.container-btns button:hover {
+    background-color: var(--color-primary-pressed);
+    transition: 0.5s ease;
+}
+
+/* .icon-plus-solid {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-image: url(../icons/plus-solid.svg);
+    background-repeat: no-repeat;
+    color: var(--color-gray-100);
+} */
+
+.container-actions-modal {
+    display: flex;
+    gap: 15px;
+    margin: 1rem 0;
 }
