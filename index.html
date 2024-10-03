@@ -23,14 +23,14 @@
 
             <div>
                 <label for="usuario">Usuario</label>
-                <input type="text" name="usuario" id="usuario" onkeyup="validarUsuario(this.value)">
+                <input type="text" name="usuario" id="usuario" onblur="validarUsuario(this.value)">
                 <div id="prueba"></div>
             </div>
         </form>
         <div>
             <button id="btn_add">Añadir</button>
             <button id="btn_grabar">Grabar</button>
-            <table class="table">
+            <table class="table" id="data_form">
                 <thead>
                     <tr>
                         <th>Item</th>
@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+<!--                     <tr>
                         <th>prueba</th>
                         <th>prueba</th>
                         <th>prueba</th>
@@ -51,7 +51,7 @@
                         <th>prueba</th>
                         <th>prueba</th>
                         <th>prueba</th>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>
@@ -63,6 +63,8 @@
         <!-- Modal content -->
         <div class="modal-content">
             <span class="close">&times;</span>
+            <input type="text" placeholder="buscar" onkeyup="buscar(this.value)">
+            <button id="add_data">Agregar</button>
             <div class="container-prod">
 
             </div>

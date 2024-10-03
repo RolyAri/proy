@@ -1,6 +1,7 @@
 let productos;
 let centroCostos;
 let usuarios;
+let selectedRowsSet = new Set(); // Conjunto para almacenar las filas seleccionadas
 
 const options = document.getElementById('centroCostos');
 const form_poductos = document.querySelector("#form_productos tbody");
@@ -50,6 +51,7 @@ function validarUsuario(user){
             found = true
         }
     })
+    document.getElementById("usuario").classList.toggle('notFound', !found);
     console.log(found)
 }
 
@@ -87,7 +89,7 @@ function iniciarPaginador(data) {
 
     // Convertir los datos a filas de tabla
     const items = data.map(item => {
-        return `<tr>
+        return `<tr data-id="${item.ccodprod}">
             <td>${item.ccodprod}</td> <!-- Cambia 'id' y 'name' según tu estructura de datos -->
             <td>${item.cdesprod}</td>
         </tr>`;
@@ -101,7 +103,7 @@ function iniciarPaginador(data) {
         
         // Mostrar los elementos en la tabla
         content.innerHTML = `
-            <table class="table">
+            <table class="table" id="data_productos">
                 <thead>
                     <tr><th>Código</th><th>Descripción</th></tr>
                 </thead>
@@ -109,8 +111,36 @@ function iniciarPaginador(data) {
             </table>
         `;
 
+         // Restaurar las selecciones
+         restoreSelections();
+
+         const modalTable = document.getElementById('data_productos');
+         modalTable.addEventListener('click', function (event) {
+             const row = event.target.closest('tr');
+             if (row) {
+                 const id = row.getAttribute('data-id'); // Usamos el atributo data-id para identificar las filas
+                 row.classList.toggle('selected');
+ 
+                 if (row.classList.contains('selected')) {
+                     selectedRowsSet.add(id); // Añadir al conjunto de filas seleccionadas
+                 } else {
+                     selectedRowsSet.delete(id); // Quitar del conjunto si se deselecciona
+                 }
+             }
+         });
+
         updateActiveButtonStates();
         createPageButtons();
+    }
+
+    function restoreSelections() {
+        const modalTableRows = document.querySelectorAll('#data_productos tbody tr');
+        modalTableRows.forEach(row => {
+            const id = row.getAttribute('data-id');
+            if (selectedRowsSet.has(id)) {
+                row.classList.add('selected');
+            }
+        });
     }
 
     // Crear los botones de paginación y el selector de elementos por página
@@ -229,3 +259,37 @@ function iniciarPaginador(data) {
     createPageButtons();
     showPage(currentPage); // Mostrar la primera página
 }
+
+function buscar(cadena){
+    let filteredItems = productos.filter(item => {
+        return Object.values(item).some(value => 
+            value.toString().toLowerCase().includes(cadena)
+        );
+    });
+    currentPage = 0;
+    createPageButtons();
+    showPage(currentPage);
+}
+
+let cont = 0;
+// Función para agregar filas seleccionadas al índice
+document.getElementById('add_data').addEventListener('click', function () {
+    const selectedRows = [...selectedRowsSet]; // Convertir el Set a array para iterar
+    if (selectedRows.length > 0) {
+        const indexTable = document.querySelector('#data_form tbody');
+        selectedRows.forEach(id => {
+            const product = productos.find(p => p.ccodprod === id);
+            if (product) {
+                const newRow = indexTable.insertRow();
+                newRow.insertCell(0).textContent = ++cont;
+                newRow.insertCell(1).textContent = product.ccodprod;
+                newRow.insertCell(2).textContent = product.cdesprod;
+                newRow.insertCell(3).innerHTML = '<input type="text" class="cantidad" value="0">';
+                
+                // Añadir más celdas según sea necesario
+            }
+        });
+    } else {
+        alert('No hay filas seleccionadas');
+    }
+});

@@ -99,6 +99,11 @@
 .table tbody{
     background-color: var(--color-gray-100);
 }
+
+.table tbody tr:nth-child(2n+1){
+    background-color: var(--color-gray-100);
+}
+
 .table tbody tr:nth-child(2n){
     background-color: var(--color-gray-200);
 }
@@ -290,4 +295,34 @@
     color: #FFFFFF;
     justify-content: center;
     align-items: center;
+}
+
+#usuario {
+    outline: 0;
+}
+.notFound {
+    border-color: red;
+}
+
+.selected {
+    background-color: #f0c040 !important; /* Color para las filas seleccionadas */
+}
+
+.cantidad {
+    width: 100%;
+    height: 35px;
+    border: 0;
+    outline: 0;
+}
+
+#data_form tbody tr:nth-child(2n+1) .cantidad {
+    background-color: var(--color-gray-100); /* hereda el color de fondo de la fila impar */
+}
+
+#data_form tbody tr:nth-child(2n) .cantidad {
+    background-color: var(--color-gray-200); /* hereda el color de fondo de la fila par */
+}
+
+#data_form tbody tr td:nth-child(4){
+    padding: 0;
 }
