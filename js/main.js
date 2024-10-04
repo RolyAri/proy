@@ -8,7 +8,6 @@ const inputFecha = document.getElementById("fecha");
 const ccInput = document.getElementById("centroCostos");
 
 const fecha = new Date();
-console.log(formatDate(fecha))
 
 inputFecha.value = formatDate(fecha);
 
@@ -38,7 +37,6 @@ fetch("acciones.php?action=getProductos",{
 }).then(response => response.json())
 .then(data => {
     productos = data;
-    console.log(data);
     /* productos.forEach((p, index) => {
         form_poductos.innerHTML += `
             <tr>
@@ -54,7 +52,6 @@ fetch("acciones.php?action=getCentroCostos",{
 }).then(response => response.json())
 .then(data => {
     centroCostos = data;
-    console.log(centroCostos);
     centroCostos.forEach(p => {
         options.innerHTML+=`<option value="${p.nidreg}">${p.ccodproy} - ${p.cdesproy}</option>`
         /* selectOptions.innerHTML+=`<div class="option" id-cc="${p.nidreg}">${p.ccodproy} - ${p.cdesproy}</div>`; */
@@ -68,8 +65,6 @@ fetch("acciones.php?action=getUsuarios",{
 }).then(response => response.json())
 .then(data => {
     usuarios = data;
-    console.log(usuarios)
-    console.log("cargado")
 })
 
 function validarUsuario(user){
@@ -80,7 +75,6 @@ function validarUsuario(user){
         }
     })
     document.getElementById("usuario").classList.toggle('notFound', !found);
-    console.log(found)
 }
 
 // Get the modal
@@ -94,7 +88,8 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
 btn.onclick = function() {
-  modal.style.display = "block";
+  modal.style.display = "flex";
+  modal.style.alignItems = "center";
 }
 
 // When the user clicks on <span> (x), close the modal
@@ -319,16 +314,22 @@ document.getElementById('add_data').addEventListener('click', function () {
                 newRow.insertCell(0).textContent = ++cont;
                 newRow.insertCell(1).textContent = product.ccodprod;
                 newRow.insertCell(2).textContent = product.cdesprod;
-                newRow.insertCell(3).innerHTML = `<input type="text" class="cantidad" value="0" id="${product.id_cprod}">`;
+                newRow.insertCell(3).innerHTML = `<input type="number" class="cantidad" value="0" id="${product.id_cprod}">`;
+                newRow.insertCell(4).innerHTML = `<td><button class="btn btn-danger" onclick="eliminar(this)">Eliminar<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button></td>`
                 
                 // Añadir más celdas según sea necesario
             }
         });
     } else {
-        alert('No hay filas seleccionadas');
+        Swal.fire({
+            icon: "error",
+            title: "Ningún item seleccionado",
+            text: "Seleccione al menos un item para poder agregarla"
+        });
     }
     selectedRowsSet = new Set();
     iniciarPaginador(productos)
+    modal.style.display = "none";
 });
 
 let detalle = [];
@@ -340,49 +341,122 @@ document.getElementById("btn_grabar").addEventListener('click', function() {
     userValue = userInput.value;
     ccValue = parseInt(ccInput.value);
     items.forEach((i, index) => {
-        const valueFila = `${i.innerText}${valueInputs[index].value}\t${valueInputs[index].id}`
+        const valueFila = `${i.innerText}\t${valueInputs[index].value}\t${valueInputs[index].id}`
         const partes = valueFila.split('\t');
-        console.log(valueFila)
 
         const filaJson = {
             codprod: partes[1],
-            idprod: partes[4],
+            idprod: partes[6],
             desprod: partes[2],
-            cantprod: parseInt(partes[3]),
+            cantprod: parseInt(partes[5]),
             numdoc: userValue,
             fecha: fechaValue,
             centrocosto: ccValue
         };
-        console.log(filaJson);
         detalle.push(filaJson);
     })
-    /* console.log(items) */
-    console.log(items.length);
-    console.log(detalle);
-    fetch("acciones.php?action=saveDetalle",{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(detalle)
-    }).then(response => response.json())
-    .then(data => {
-        if(data.success){
+    console.log(detalle)
+    let sendValidation;
+    if(detalle.length > 0){
+        detalle.forEach(d => {
+            if(d.cantprod <= 0 || d.numdoc.trim() == "" || d.fecha == "" || d.centroCosto == 0 ){
+                sendValidation = false;
+            }        
+        })
+    }
+    
+
+    if(sendValidation==false){
+        if(inputFecha.value == "" || ccInput.value == 0 || userInput.value.trim()==""){
+            let msg = "";
+            inputFecha.value == "" ? msg+=" [Fecha]" : "";
+            ccInput.value == 0 ? msg+=" [Centro de Costos]" : "";
+            userInput.value.trim() == "" ? msg+=" [DNI]" : ""; 
             Swal.fire({
-                icon: "success",
-                title: "Registro exitoso",
-                text: "Los registros se han guardado exitosamente"
+                icon: "error",
+                title: "Campos necesarios",
+                text: "Por favor revise los campos:"+ msg
             });
         }else {
             Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Error al procesar los registros, intente nuevamente"
+                title: "Agregue una cantidad",
+                text: "Agregar cantidades mayores a 0"
             });
         }
-    })
+        /* detalle = []; */
+        
+    }else if(userInput.value.length < 8){
+        Swal.fire({
+            icon: "error",
+            title: "DNI no válido",
+            text: "Por favor, digite un DNI válido de 8 digitos"
+        });
+    }else{
+        fetch("acciones.php?action=saveDetalle",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(detalle)
+        }).then(response => response.json())
+        .then(data => {
+            if(data.success){
+                Swal.fire({
+                    icon: "success",
+                    title: "Registro exitoso",
+                    text: "Los registros se han guardado exitosamente"
+                });
+                eliminarTodasLasFilas();
+            }else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error al procesar los registros, intente nuevamente"
+                });
+            }
+        })
+        
+    }
     detalle = [];
 });
+
+function eliminar(Id) {
+  
+    let row = Id.parentNode.parentNode;
+    let table = document.getElementById("data_form"); 
+    table.deleteRow(row.rowIndex);
+  
+};
+
+function eliminarTodasLasFilas() {
+    let table = document.getElementById("data_form");
+    let rowCount = table.rows.length;
+  
+    // Bucle para eliminar las filas, comenzando desde abajo
+    for (let i = rowCount - 1; i > 0; i--) {
+      table.deleteRow(i);
+    }
+}
+document.getElementById("btn_limpiar").addEventListener('click', function() {
+    eliminarTodasLasFilas();
+})
+
+function validarDNI() {
+    let input = document.getElementById("usuario");
+    let errorMensaje = document.getElementById("errorDNI");
+    let dangerIcon = document.getElementById("danger-icon");
+
+    if (input.value.length !== 8) {
+        // Mostrar el mensaje de error si la longitud no es de 8
+        errorMensaje.style.display = "block";
+        dangerIcon.style.display = "block"
+    } else {
+        // Ocultar el mensaje si es válido
+        errorMensaje.style.display = "none";
+        dangerIcon.style.display = "none"
+    }
+}
 /* const customSelect = document.querySelector('.custom-select');
 const selectPlaceholder = document.querySelector('.select-placeholder');
 const selectOptions = document.querySelector('.select-options');
