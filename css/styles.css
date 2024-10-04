@@ -8,24 +8,57 @@
 }
 
 :root {
+    /* Neutral Colors */
+    --neutral-100: #1A1A1A;
+    --neutral-90: #424242;
+    --neutral-80: #616161;
+    --neutral-70: #757575;
+    --neutral-60: #9E9E9E;
+    --neutral-50: #C2C2C2;
+    --neutral-40: #E0E0E0;
+    --neutral-30: #EDEDED;
+    --neutral-20: #F5F5F5;
+    --neutral-10: #FFFFFF;
+
     /* Primary Colors */
-    --color-primary-main: #5A3FE1;
-    --color-primary-hover: #3314C7;
-    --color-primary-pressed: #200F70;
-    --color-primary-focus: #AC9FF0;
-    --color-primary-border: #C4BAF5;
-    --color-primary-secondary: #EFEDFA;
-  
-    /* Gray Colors */
-    --color-gray-100: #ECECEC;
-    --color-gray-200: #D8D8D8;
-    --color-gray-300: #C5C5C5;
-    --color-gray-400: #B1B1B1;
-    --color-gray-500: #9E9E9E;
-    --color-gray-600: #7E7E7E;
-    --color-gray-700: #5F5F5F;
-    --color-gray-800: #3F3F3F;
-    --color-gray-900: #202020;
+    --primary-pressed: #220F80;
+    --primary-hover: #3B25A8;
+    --primary-main: #482BD9;
+    --primary-border: #B6ABED;
+    --primary-focus: #DBD0FF;
+    --primary-bg-color: #F6F4FF;
+
+    /* Success Colors */
+    --success-pressed: #044407;
+    --success-hover: #005803;
+    --success-main: #007505;
+    --success-border: #A2C1A3;
+    --success-focus: #C5E1C6;
+    --success-bg-color: #EBF8EC;
+
+    /* Warning Colors */
+    --warning-pressed: #726000;
+    --warning-hover: #BFA100;
+    --warning-main: #E5C100;
+    --warning-border: #F4E386;
+    --warning-focus: #FFF4B9;
+    --warning-bg-color: #FAF7E6;
+
+    /* Danger Colors */
+    --danger-pressed: #590000;
+    --danger-hover: #940000;
+    --danger-main: #B20000;
+    --danger-border: #E5AAAA;
+    --danger-focus: #F9D9D9;
+    --danger-bg-color: #FBEFEF;
+
+    /* Info Colors */
+    --info-pressed: #002B52;
+    --info-hover: #004889;
+    --info-main: #0065C1;
+    --info-border: #AAC7E1;
+    --info-focus: #D9E8F4;
+    --info-bg-color: #F0F8FF;
 }
 /* The Modal (background) */
 .modal {
@@ -69,7 +102,7 @@
     width: 90%;
     margin: 0 auto;
     padding: 1rem 1rem 1rem 2rem;
-    background: var(--color-primary-secondary);
+    background: var(--neutral-20);
     box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.1);
     border-radius: 50px;
     overflow-y: scroll;
@@ -91,7 +124,7 @@
 }
 
 .table thead{
-    background-color: var(--color-gray-200);
+    background-color: var(--neutral-50);
     color: #000;
 }
 
@@ -100,19 +133,19 @@
     text-align: left;
 }
 .table tbody{
-    background-color: var(--color-gray-100);
+    background-color: var(--neutral-10);
 }
 
 .table tbody tr:nth-child(2n+1){
-    background-color: var(--color-gray-100);
+    background-color: var(--neutral-20);
 }
 
 .table tbody tr:nth-child(2n){
-    background-color: var(--color-gray-200);
+    background-color: var(--neutral-40)
 }
 .table tbody tr:hover {
-    border-bottom: 1px var(--color-gray-700) solid;
-    border-top: 1px var(--color-gray-700) solid;
+    border-bottom: 1px var(--neutral-100) solid;
+    border-top: 1px var(--neutral-100) solid;
 }
 .table tbody tr td{
     font-family: "Inter", sans-serif;
@@ -120,7 +153,7 @@
     padding: 10px;
 }
 
-.wrap::-webkit-scrollbar{
+/* .wrap::-webkit-scrollbar{
     width: 8px;
     background-color: var(--color-gray-300);
     border-radius: 20px;
@@ -132,7 +165,7 @@
     background-color: var(--color-gray-400);
     border-radius: 6px;
    
-    }
+    } */
 
 .validar {
     display: inline-flex;
@@ -160,11 +193,11 @@
     padding: 5px 10px;
     margin: 0 5px;
     cursor: pointer;
-    outline: 1px solid var(--color-primary-main);
-    color: var(--color-primary-main);
+    outline: 1px solid var(--primary-main);
+    color: var(--primary-main);
     border-radius: 4px;
     border: none;
-    background-color: var(--color-primary-secondary);
+    background-color: var(--primary-bg-color);
   }
   
   .hidden {
@@ -178,7 +211,7 @@
   }
   
   .pagination button.active {
-    background-color: var(--color-primary-main);
+    background-color: var(--primary-main);
     color: white;
   }
 
@@ -209,16 +242,17 @@
     width: 100%;
 }
 
+
 .select select{
+    width: 100%;
     appearance: none;
     background-color: #FFFFFF;
-    border: 1px solid var(--color-gray-400);
+    border: 1px solid var(--neutral-40);
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    width: 200px; /* Ajusta el ancho */
     border-radius: 4px;
-    color: var(--color-gray-700);
+    color: var(--neutral-70);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
 }
 
@@ -230,12 +264,13 @@
     position: relative;
     width: 200px;
   }
-  .select i{
+  .select svg{
+    width: 20px;
     position: absolute;
-    top: 50%;
+    top: 65%;
     right: 10px;
     transform: translateY(-50%);
-    color: var(--color-gray-700);
+    fill: var(--neutral-70);
   }
 
   .select select::-webkit-scrollbar {
@@ -243,7 +278,7 @@
 }
 
 .select select::-webkit-scrollbar-track {
-    background: #f0f0f0; /* Fondo del track del scroll */
+    background: var(--neutral-50); /* Fondo del track del scroll */
     border-radius: 10px;
 }
 
@@ -254,10 +289,10 @@
 }
 
 .select select::-webkit-scrollbar-thumb:hover {
-    background-color: var(--color-gray-300); /* Color del pulgar al pasar el mouse */
+    background-color: var(--neutral-30); /* Color del pulgar al pasar el mouse */
 }
-.select select option:hover{
-    background-color: var(--color-primary-secondary);
+#centroCostos option:hover {
+    background-color: green; /* Cambia el color según tu preferencia */
 }
 .datos_solicitante, 
 .nomb_solicitante,
@@ -308,7 +343,7 @@
 }
 
 .selected {
-    background-color: #f0c040 !important; /* Color para las filas seleccionadas */
+    background-color: var(--primary-focus) !important; /* Color para las filas seleccionadas */
 }
 
 .cantidad {
@@ -341,12 +376,12 @@
     background-color: none;
     border: 0;
     cursor: pointer;
-    background-color: var(--color-primary-main);
-    border: 3px var(--color-primary-focus) solid;
+    background-color: var(--primary-main);
+    /* border: 3px var(--primary-focus) solid; */
     padding: 0.5rem 1rem;
-    border-radius: 10px;
+    border-radius: 4px;
     text-decoration: none;
-    color: var(--color-gray-100);
+    color: var(--neutral-10);
     transition: 0.5s ease;
     display: flex;
     gap: 10px;
@@ -357,14 +392,19 @@
 .btn svg {
     width: 20px; /* Ajusta el ancho del SVG */
     height: 20px; /* Ajusta la altura del SVG */
-    fill: var(--color-gray-100); /* Color del ícono, puede cambiarse según sea necesario */
+    fill: var(--neutral-10); /* Color del ícono, puede cambiarse según sea necesario */
 }
 
-.container-btns button:hover {
-    background-color: var(--color-primary-pressed);
+.btn:hover {
+    background-color: var(--primary-bg-color);
+    /* border: 3px var(--primary-focus) solid; */
+    color: var(--primary-main);
     transition: 0.5s ease;
 }
 
+.btn:hover svg {
+    fill: var(--primary-main);
+}
 /* .icon-plus-solid {
     width: 20px;
     height: 20px;
@@ -378,4 +418,84 @@
     display: flex;
     gap: 15px;
     margin: 1rem 0;
+}
+
+.inputText {
+    width: 100%;
+    height: 32px;
+    outline: none;
+    border-radius: 3px;
+    border: 1px var(--primary-hover) solid;
+    background-color: var(--neutral-10);
+    padding: 12px 6px;
+}
+
+.container-attributes {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.container-attributes div {
+    width: 100%;
+}
+
+
+/* Container for the custom select */
+.custom-select-container {
+    width: 300px;
+    margin: 50px auto;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+/* The select placeholder */
+.custom-select {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder text */
+.select-placeholder {
+    color: #666;
+}
+
+/* Options container (hidden by default) */
+.select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Option items */
+.option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hover and selected styles */
+.option:hover {
+    background-color: #f0f0f0;
+}
+
+.option.selected {
+    background-color: #e0e0ff;
+    color: #4a4aff;
 }

@@ -57,6 +57,7 @@ fetch("acciones.php?action=getCentroCostos",{
     console.log(centroCostos);
     centroCostos.forEach(p => {
         options.innerHTML+=`<option value="${p.nidreg}">${p.ccodproy} - ${p.cdesproy}</option>`
+        /* selectOptions.innerHTML+=`<div class="option" id-cc="${p.nidreg}">${p.ccodproy} - ${p.cdesproy}</div>`; */
     });
     
     
@@ -382,3 +383,35 @@ document.getElementById("btn_grabar").addEventListener('click', function() {
     })
     detalle = [];
 });
+/* const customSelect = document.querySelector('.custom-select');
+const selectPlaceholder = document.querySelector('.select-placeholder');
+const selectOptions = document.querySelector('.select-options');
+const options = document.querySelectorAll('.option');
+
+// Toggle the options list on click
+customSelect.addEventListener('click', () => {
+    selectOptions.style.display = selectOptions.style.display === 'block' ? 'none' : 'block';
+});
+
+// Handle option selection
+options.forEach(option => {
+    option.addEventListener('click', (event) => {
+        // Update placeholder text
+        selectPlaceholder.textContent = event.target.textContent;
+
+        // Highlight selected option
+        options.forEach(opt => opt.classList.remove('selected'));
+        event.target.classList.add('selected');
+
+        // Hide the options list
+        selectOptions.style.display = 'none';
+    });
+});
+
+// Close options list if clicked outside
+document.addEventListener('click', (event) => {
+    if (!customSelect.contains(event.target)) {
+        selectOptions.style.display = 'none';
+    }
+});
+ */
