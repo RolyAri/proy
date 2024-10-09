@@ -314,7 +314,7 @@ document.getElementById('add_data').addEventListener('click', function () {
                 newRow.insertCell(0).textContent = ++cont;
                 newRow.insertCell(1).textContent = product.ccodprod;
                 newRow.insertCell(2).textContent = product.cdesprod;
-                newRow.insertCell(3).innerHTML = `<input type="number" class="cantidad" value="0" id="${product.id_cprod}">`;
+                newRow.insertCell(3).innerHTML = `<input type="number" class="cantidad" id="${product.id_cprod}" placeholder="Digite cantidad">`;
                 newRow.insertCell(4).innerHTML = `<td><button class="btn btn-danger" onclick="eliminar(this)">Eliminar<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z"/></svg></button></td>`
                 
                 // Añadir más celdas según sea necesario
@@ -359,7 +359,7 @@ document.getElementById("btn_grabar").addEventListener('click', function() {
     let sendValidation;
     if(detalle.length > 0){
         detalle.forEach(d => {
-            if(d.cantprod <= 0 || d.numdoc.trim() == "" || d.fecha == "" || d.centroCosto == 0 ){
+            if(d.cantprod <= 0 || isNaN(d.cantprod) || d.numdoc.trim() == "" || d.fecha == "" || d.centroCosto == 0 ){
                 sendValidation = false;
             }        
         })
@@ -422,10 +422,24 @@ document.getElementById("btn_grabar").addEventListener('click', function() {
 });
 
 function eliminar(Id) {
+    Swal.fire({
+        title: "¿Estás seguro de eliminar el item?",
+        confirmButtonText: "Si, Eliminar",
+        showDenyButton: true,
+        denyButtonText: "No, Cancelar"
+      }).then((result) => { 
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            let row = Id.parentNode.parentNode;
+            let table = document.getElementById("data_form"); 
+            table.deleteRow(row.rowIndex);
+          Swal.fire("Item Eliminado!", "", "success");
+        } else if (result.isDenied) {
+          Swal.fire("No se eliminó el item", "", "info");
+        }
+      });
   
-    let row = Id.parentNode.parentNode;
-    let table = document.getElementById("data_form"); 
-    table.deleteRow(row.rowIndex);
+    
   
 };
 
@@ -439,7 +453,21 @@ function eliminarTodasLasFilas() {
     }
 }
 document.getElementById("btn_limpiar").addEventListener('click', function() {
-    eliminarTodasLasFilas();
+    
+    Swal.fire({
+        title: "¿Estás seguro de eliminar todos los items?",
+        confirmButtonText: "Si, Eliminar",
+        showDenyButton: true,
+        denyButtonText: "No, Cancelar"
+      }).then((result) => { 
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            eliminarTodasLasFilas();
+          Swal.fire("Items Eliminados!", "", "success");
+        } else if (result.isDenied) {
+          Swal.fire("No se eliminó ningún item", "", "info");
+        }
+      });
 })
 
 function validarDNI() {
@@ -457,6 +485,51 @@ function validarDNI() {
         dangerIcon.style.display = "none"
     }
 }
+let reporte;
+document.getElementById("btn_excel").addEventListener('click', function() {
+    const fech= new Date();
+    fetch("acciones.php?action=getReporte",{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({fecha: formatDate(fech)})
+    }).then(response => response.json())
+    .then(data => {
+        /* reporte = data; */
+        let dataConCabeceras = data.map(row => ({
+            'ID Producto': row.nidprod,
+            'Código Producto': row.ccodprod,
+            'Descripción': row.cdesprod,
+            'Cantidad': row.ncantprod,
+            'Número Documento': row.cnumdoc,
+            'Fecha': row.dfecha,
+            'ID Proyecto': row.nidproy,
+            'Codigo de Centro de Costos': row.ccodproy,
+            'Descripción de Centro de Costos' : row.cdesproy
+        }));
+        filename=`Reporte ${formatDate(fech)}.xlsx`;
+        var ws = XLSX.utils.json_to_sheet(dataConCabeceras);
+        ws['!cols'] = [
+            { wpx: 100 }, // ID Producto (ancho en píxeles)
+            { wpx: 150 }, // Código Producto
+            { wpx: 300 }, // Descripción
+            { wpx: 80 },  // Cantidad
+            { wpx: 150 }, // Número Documento
+            { wpx: 100 }, // Fecha
+            { wpx: 120 },  // ID Proyecto
+            { wpx: 150 },  // Codigo Proyecto
+            { wpx: 300 }  // Descripcion Proyecto
+        ];
+
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Reporte");
+        XLSX.writeFile(wb,filename);
+    })
+
+            
+     
+})
 /* const customSelect = document.querySelector('.custom-select');
 const selectPlaceholder = document.querySelector('.select-placeholder');
 const selectOptions = document.querySelector('.select-options');
@@ -489,3 +562,4 @@ document.addEventListener('click', (event) => {
     }
 });
  */
+

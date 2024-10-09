@@ -425,6 +425,21 @@
 .btn-danger:hover svg {
     fill: var(--danger-main);
 }
+
+.btn-success {
+    background-color: var(--success-main);
+    color: var(--neutral-10);
+}
+
+.btn-success:hover {
+    background-color: var(--neutral-10);
+    /* border: 3px var(--primary-focus) solid; */
+    color: var(--success-hover);
+    transition: 0.5s ease;
+}
+.btn-success:hover svg {
+    fill: var(--success-main);
+}
 /* .icon-plus-solid {
     width: 20px;
     height: 20px;
